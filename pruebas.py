@@ -1,60 +1,39 @@
-# -*- coding: utf-8 -*-
 
-# Simple calendario con tkinter
-
-from calendar import *
 from tkinter import *
-from datetime import *
-
-# Obtenemos los valores del año y mes a mostrar
-today = date.today()
-year = format(today.month)
-month = format(today.year)
+from tkcalendar import *
 
 
-def writeCalendar(year, month):
-    # Asignamos el año y mes al calendario
-    str1 = calendar.month(year, month)
-
-    label1.configure(text=str1)
+ventana = Tk()
+ventana.geometry("600x400")
 
 
-def mesAnterior():
-    global month, year
-    month -= 1
-    if month == 0:
-        month = 12
-        year -= 1
+calendario = Calendar(ventana, selectmode="day", date_pattern="d/m/yyyy")
+calendario.pack(pady=20)
 
-    writeCalendar(year, month)
+def grabar_fecha():
+    fecha=calendario.get_date()
+    my_label.config(text=fecha )
 
+my_botton= Button(ventana, text= "obtener fecha", command=grabar_fecha)
+my_botton.pack(pady=20)
 
-def mesSiguiente():
-    global month, year
-    month += 1
-    if month == 13:
-        month = 1
-        year += 1
-
-    writeCalendar(year, month)
+my_label = Label(ventana, text="")
+my_label.pack(pady=20)
+ventana.mainloop()
 
 
-root = Tk()
-root.title("Calendario")
 
-# Lo posicionamos en un label
-label1 = Label(root, text="", font=('courier', 14, 'bold'), bg='white', justify=LEFT)
-label1.grid(row=1, column=1)
 
-# ponemos los botones dentro un Frame
-frame = Frame(root, bd=5)
-anterior = Button(frame, text="Anterior", command=mesAnterior)
-anterior.grid(row=1, column=1, sticky=W)
-siguiente = Button(frame, text="Siguiente", command=mesSiguiente)
-siguiente.grid(row=1, column=2)
-frame.grid(row=2, column=1)
+# from datetime import date
+# from datetime import datetime
+#
+# #Día actual
+# today = date.today()
+#
+# #Fecha actual
+# now = datetime.now()
+#
+# print(today)
+# print(now)
 
-writeCalendar(year, month)
 
-# ejecutamos el evento loop
-root.mainloop()
