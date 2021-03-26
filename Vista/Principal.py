@@ -3,6 +3,7 @@ from tkinter import messagebox
 from datetime import date
 
 import Vista.Calendario as c
+import Vista.TablaPrincipal as tp
 
 
 class Principal:
@@ -30,15 +31,15 @@ class Principal:
     fechaIni = str(date.today())
     fechaFin = str(date.today())
     btnFechaIni = Button(frameSuperior, text=fechaIni)
-    btnFechafin = Button(frameSuperior, text=fechaFin)
+    btnFechaFin = Button(frameSuperior, text=fechaFin)
 
     ##------------variables-----------
 
     ###Contructor
     def principalVen(self):
         ##-------objetos-----
-        cal = c.Calendarios()
-
+        calendario = c.Calendarios()
+        tabla=tp.Tabla() #ejecutamos el constructor de la clase tabla
         ##-------objetos-----
 
         # -------menus------
@@ -104,7 +105,7 @@ class Principal:
         lblFechaIni.place(x=420, y=70)
         # boton fecha de inicio
 
-        self.btnFechaIni.config(fon=("Helvética", 11), command=cal.ventanaCalIni)
+        self.btnFechaIni.config(fon=("Helvética", 11), command=calendario.ventanaCalIni)
         self.btnFechaIni.place(x=550, y=60)
 
         # lacel fecha final
@@ -114,9 +115,10 @@ class Principal:
 
         # boton fecha de final
 
-        self.btnFechafin.config(fon=("Helvética", 11))
-        self.btnFechafin.place(x=780, y=60)
+        self.btnFechaFin.config(fon=("Helvética", 11), command=calendario.ventanaCalFin)
+        self.btnFechaFin.place(x=780, y=60)
         # ----------------Contenido superior------------
+
 
         # -----mainloop-----------
         self.ventana.mainloop()
