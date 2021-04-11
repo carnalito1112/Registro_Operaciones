@@ -1,9 +1,10 @@
-from tkinter import *
-from tkinter import messagebox
 from datetime import date
+from tkinter import *
+from tkinter import messagebox, ttk
 
 import Vista.Calendario as c
 import Vista.TablaPrincipal as tp
+#import Vista.Entrada as vE
 
 
 class Principal:
@@ -28,6 +29,18 @@ class Principal:
 
     ##-----------variables-----------
 
+    ##Tabla---}-- de la clase tabla principal
+    tabla = ttk.Treeview(frameInferior, columns=[f"#{n}" for n in range(1, 8)])
+    ##Tabla----
+
+
+    #---------variables de a clase Entrada - las declaramos aqui pq la utilizaremos para nueva entrada y editar
+
+
+    #---------variables de la clase entrada
+
+
+    #-----variables locales de la clase principal
     fechaIni = str(date.today())
     fechaFin = str(date.today())
     btnFechaIni = Button(frameSuperior, text=fechaIni)
@@ -39,7 +52,9 @@ class Principal:
     def principalVen(self):
         ##-------objetos-----
         calendario = c.Calendarios()
-        tabla=tp.Tabla() #ejecutamos el constructor de la clase tabla
+        tabla = tp.Tabla()
+
+
         ##-------objetos-----
 
         # -------menus------
@@ -117,8 +132,13 @@ class Principal:
 
         self.btnFechaFin.config(fon=("Helvética", 11), command=calendario.ventanaCalFin)
         self.btnFechaFin.place(x=780, y=60)
+
         # ----------------Contenido superior------------
 
+
+        # ----------------Contenido inferior------------
+        tabla.TablaPrincipal()
+        # ----------------Contenido inferior------------
 
         # -----mainloop-----------
         self.ventana.mainloop()

@@ -1,19 +1,23 @@
 from tkcalendar import *
 from tkinter import *
+
 import Vista.Principal as p
+#import Vista.Entrada as es
 
 
 class Calendarios:
 
     def ventanaCalIni(self):
+        # objeto de la clase VenPrincipal
+        venPrin = p.Principal()
+        # objeto de la clase VenPrincipal
+        venPrin.ventana.withdraw()
         # -------toplavel-------
         ventanaCal = Toplevel()
         ventanaCal.geometry("270x300")
         ##-------toplavel-------
 
-        # objeto de la clase VenPrincipal
-        venPrin = p.Principal()
-        # objeto de la clase VenPrincipal
+
 
         # label seleccione fecha
         lblfechaSel = Label(ventanaCal, text="Selecciona una fecha de inicio")
@@ -21,7 +25,7 @@ class Calendarios:
         lblfechaSel.grid(row=0, column=0, pady=10, padx=10)
 
         # calendario
-        calendario = Calendar(ventanaCal, selectmode="day", date_pattern="d/m/yyyy")
+        calendario = Calendar(ventanaCal, selectmode="day", date_pattern="yyyy-mm-dd")
         calendario.grid(row=1, column=0, pady=10, padx=10)
 
         def salir():
@@ -30,7 +34,7 @@ class Calendarios:
             ventanaCal.destroy()
 
         # boton salir
-        btnSalirCal = Button(ventanaCal, text="Salir", command=salir)
+        btnSalirCal = Button(ventanaCal, text="Grabar", command=salir)
         btnSalirCal.config(fon=("Helvética", 11))
         btnSalirCal.grid(row=2, column=0, pady=10, padx=10)
 
@@ -38,14 +42,16 @@ class Calendarios:
         ventanaCal.mainloop()
 
     def ventanaCalFin(self):
+        # objeto de la clase VenPrincipal
+        venPrin = p.Principal()
+        # objeto de la clase VenPrincipal
+        venPrin.ventana.withdraw()
         # -------toplavel-------
         ventanaCal = Toplevel()
         ventanaCal.geometry("270x300")
         ##-------toplavel-------
 
-        # objeto de la clase VenPrincipal
-        venPrin = p.Principal()
-        # objeto de la clase VenPrincipal
+
 
         # label seleccione fecha
         lblfechaSel = Label(ventanaCal, text="Selecciona una fecha de inicio")
@@ -53,7 +59,7 @@ class Calendarios:
         lblfechaSel.grid(row=0, column=0, pady=10, padx=10)
 
         # calendario
-        calendario = Calendar(ventanaCal, selectmode="day", date_pattern="d/m/yyyy")
+        calendario = Calendar(ventanaCal, selectmode="day", date_pattern="yyyy-mm-dd")
         calendario.grid(row=1, column=0, pady=10, padx=10)
 
         def salir():
@@ -62,9 +68,12 @@ class Calendarios:
             ventanaCal.destroy()
 
         # boton salir
-        btnSalirCal = Button(ventanaCal, text="Salir", command=salir)
+        btnSalirCal = Button(ventanaCal, text="Grabar", command=salir)
         btnSalirCal.config(fon=("Helvética", 11))
         btnSalirCal.grid(row=2, column=0, pady=10, padx=10)
 
+
+
         # MainLoop
-        ventanaCal.mainloop()
+        #ventanaCal.mainloop()
+

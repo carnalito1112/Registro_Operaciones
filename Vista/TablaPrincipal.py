@@ -1,18 +1,21 @@
-from tkinter import ttk
+from tkinter import *
 
 import Vista.Principal as p
+import Controlador.DatosPrueba as cd
+
 
 class Tabla:
 
-    def __init__(self):
+    def TablaPrincipal(self):
 
-        #-------variables------
-        #objeto de la clase principal
-        principal= p.Principal()
-        tabla=ttk.Treeview(principal.frameInferior, columns=[f"#{n}" for n in range(1, 9)])
-        tabla.pack()
         # -------variables------
-        #------contenido------
+        # objeto de la clase principal
+        tabla = p.Principal.tabla
+
+        tabla.pack()
+        lista = cd.ConEntrada.datosProvisionales(self)
+        # -------variables------
+        # ------contenido------
 
         tabla.heading("#0", text="N.operacion")
         tabla.heading("#1", text="Fecha entrada")
@@ -22,15 +25,24 @@ class Tabla:
         tabla.heading("#5", text="Nota")
         tabla.heading("#6", text="Img entrada")
         tabla.heading("#7", text="Img salida")
-        tabla.heading("#8", text="Editar")
+
         ##------le damos tamaño a la columnas
-        for i in range(0,9):
-            tabla.column("#"+str(i),width="110")
+        for i in range(0, 8):
+            tabla.column("#" + str(i), width="125")
             print(i)
         ##------le damos tamaño a la columnas
-
+        tabla.bind("<Double-Button-1>", self.click)
         ###--------------------Contenido de la tabla-------
-        tabla.insert(parent="",index="end", iid=0,values=("1","2","3","4","5","6","7","8"))
+
+        for l in lista:
+            tabla.insert(parent="", index="end", text=l[0], values=(l[1], l[2], l[3], l[4], l[5], l[6], l[7]))
 
         ###--------------------Contenido de la tabla-------
         # ------contenido------
+
+    def click(self, event):
+
+        seleccion = p.Principal.tabla.item(p.Principal.tabla.selection())
+        lblSeleccion = Label(p.Principal.frameSuperior, text=seleccion['text'])
+        lblSeleccion.config(fon=("Helvética", 11))
+        lblSeleccion.place(x=900, y=70)
