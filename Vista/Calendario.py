@@ -2,22 +2,16 @@ from tkcalendar import *
 from tkinter import *
 
 import Vista.Principal as p
-#import Vista.Entrada as es
 
 
 class Calendarios:
 
-    def ventanaCalIni(self):
-        # objeto de la clase VenPrincipal
-        venPrin = p.Principal()
-        # objeto de la clase VenPrincipal
-        venPrin.ventana.withdraw()
-        # -------toplavel-------
-        ventanaCal = Toplevel()
+    def plantilla_fec(self, ventana, label):
+        # objeto fecha
+
+        ventanaCal = Toplevel(ventana)
         ventanaCal.geometry("270x300")
         ##-------toplavel-------
-
-
 
         # label seleccione fecha
         lblfechaSel = Label(ventanaCal, text="Selecciona una fecha de inicio")
@@ -29,51 +23,11 @@ class Calendarios:
         calendario.grid(row=1, column=0, pady=10, padx=10)
 
         def salir():
-            venPrin.fechaIni = calendario.get_date()
-            venPrin.btnFechaIni.config(text=venPrin.fechaIni)
+            fecha = calendario.get_date()
+            label.config(text=fecha)
             ventanaCal.destroy()
 
         # boton salir
         btnSalirCal = Button(ventanaCal, text="Grabar", command=salir)
         btnSalirCal.config(fon=("Helvética", 11))
         btnSalirCal.grid(row=2, column=0, pady=10, padx=10)
-
-        # MainLoop
-        ventanaCal.mainloop()
-
-    def ventanaCalFin(self):
-        # objeto de la clase VenPrincipal
-        venPrin = p.Principal()
-        # objeto de la clase VenPrincipal
-        venPrin.ventana.withdraw()
-        # -------toplavel-------
-        ventanaCal = Toplevel()
-        ventanaCal.geometry("270x300")
-        ##-------toplavel-------
-
-
-
-        # label seleccione fecha
-        lblfechaSel = Label(ventanaCal, text="Selecciona una fecha de inicio")
-        lblfechaSel.config(fon=("Helvética", 11))
-        lblfechaSel.grid(row=0, column=0, pady=10, padx=10)
-
-        # calendario
-        calendario = Calendar(ventanaCal, selectmode="day", date_pattern="yyyy-mm-dd")
-        calendario.grid(row=1, column=0, pady=10, padx=10)
-
-        def salir():
-            venPrin.fechaFin= calendario.get_date()
-            venPrin.btnFechaFin.config(text=venPrin.fechaFin)
-            ventanaCal.destroy()
-
-        # boton salir
-        btnSalirCal = Button(ventanaCal, text="Grabar", command=salir)
-        btnSalirCal.config(fon=("Helvética", 11))
-        btnSalirCal.grid(row=2, column=0, pady=10, padx=10)
-
-
-
-        # MainLoop
-        #ventanaCal.mainloop()
-

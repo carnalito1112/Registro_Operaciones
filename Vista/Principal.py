@@ -1,10 +1,18 @@
 from datetime import date
 from tkinter import *
 from tkinter import messagebox, ttk
+from sys import version_info
+
+if version_info.major == 2:
+    import Tkinter as tk
+elif version_info.major == 3:
+    import tkinter as tk
+
+from functools import partial
 
 import Vista.Calendario as c
 import Vista.TablaPrincipal as tp
-#import Vista.Entrada as vE
+import Vista.Plantilla as pt
 
 
 class Principal:
@@ -43,15 +51,15 @@ class Principal:
     #-----variables locales de la clase principal
     fechaIni = str(date.today())
     fechaFin = str(date.today())
-    btnFechaIni = Button(frameSuperior, text=fechaIni)
-    btnFechaFin = Button(frameSuperior, text=fechaFin)
+    btnFechaIni = Button(frameSuperior, text="Cambiar")
+    btnFechaFin = Button(frameSuperior, text="Cambiar")
 
     ##------------variables-----------
 
     ###Contructor
     def principalVen(self):
         ##-------objetos-----
-        calendario = c.Calendarios()
+        obj_calendario = c.Calendarios()
         tabla = tp.Tabla()
 
 
@@ -105,7 +113,7 @@ class Principal:
         lblGanPerDia.place(x=840, y=15)
 
         # boton nueva operacion
-        btnNuevOperacion = Button(self.frameSuperior, text="Nueva Operacion")
+        btnNuevOperacion = Button(self.frameSuperior, text="Nueva Operacion", command=self.get_plantilla)
         btnNuevOperacion.config(fon=("Helvética", 11))
         btnNuevOperacion.place(x=10, y=60)
         # boton nueva operacion
@@ -118,20 +126,31 @@ class Principal:
         lblFechaIni = Label(self.frameSuperior, text="Fecha inicio:")
         lblFechaIni.config(fon=("Helvética", 11))
         lblFechaIni.place(x=420, y=70)
+
+        # label fecha inicio 2
+        #se envia a calendario
+        lblFecha_ini_2 = Label(self.frameSuperior, text=self.fechaIni)
+        lblFecha_ini_2.config(fon=("Helvética", 11))
+        lblFecha_ini_2.place(x=510, y=70)
         # boton fecha de inicio
 
-        self.btnFechaIni.config(fon=("Helvética", 11), command=calendario.ventanaCalIni)
-        self.btnFechaIni.place(x=550, y=60)
+        self.btnFechaIni.config(fon=("Helvética", 11), command=partial(obj_calendario.plantilla_fec,self.ventana,lblFecha_ini_2))
+        self.btnFechaIni.place(x=610, y=60)
 
         # lacel fecha final
-        lblFecha2 = Label(self.frameSuperior, text="final:")
-        lblFecha2.config(fon=("Helvética", 11))
-        lblFecha2.place(x=700, y=70)
+        lblFecha_fin = Label(self.frameSuperior, text="final:")
+        lblFecha_fin.config(fon=("Helvética", 11))
+        lblFecha_fin.place(x=700, y=70)
+
+        #se envia a calendario
+        lblFecha_fin_2 = Label(self.frameSuperior, text=self.fechaFin)
+        lblFecha_fin_2.config(fon=("Helvética", 11))
+        lblFecha_fin_2.place(x=750, y=70)
 
         # boton fecha de final
 
-        self.btnFechaFin.config(fon=("Helvética", 11), command=calendario.ventanaCalFin)
-        self.btnFechaFin.place(x=780, y=60)
+        self.btnFechaFin.config(fon=("Helvética", 11), command=partial(obj_calendario.plantilla_fec,self.ventana,lblFecha_fin_2))
+        self.btnFechaFin.place(x=850, y=60)
 
         # ----------------Contenido superior------------
 
@@ -148,3 +167,8 @@ class Principal:
         valor = messagebox.askyesno("Salir", "¿deseas salir del programa?")
         if valor:
             self.ventana.quit()
+
+
+    def get_plantilla(self):
+        plantilla = pt.Plantilla()
+        plantilla.ventanaEntrada(self.ventana)

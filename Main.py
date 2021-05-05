@@ -1,5 +1,5 @@
-from Vista.Principal import *
+import Vista.Principal as p
 
-p=Principal()
-p.principalVen()
+pr=p.Principal()
+pr.principalVen()
 
