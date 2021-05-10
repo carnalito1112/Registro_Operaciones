@@ -2,9 +2,12 @@ from tkinter import *
 
 import Vista.Principal as p
 import Controlador.DatosPrueba as cd
+import Vista.Plantilla as pl
 
 
 class Tabla:
+
+    editar_operacion=pl.Plantilla()
 
     def TablaPrincipal(self):
 
@@ -43,6 +46,4 @@ class Tabla:
     def click(self, event):
 
         seleccion = p.Principal.tabla.item(p.Principal.tabla.selection())
-        lblSeleccion = Label(p.Principal.frameSuperior, text=seleccion['text'])
-        lblSeleccion.config(fon=("Helvética", 11))
-        lblSeleccion.place(x=900, y=70)
+        self.editar_operacion.ventana_Editar(seleccion["text"],p.Principal.ventana)

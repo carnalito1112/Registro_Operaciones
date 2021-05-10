@@ -22,7 +22,7 @@ class Principal:
     # ----------ventana------
     ventana = Tk()
     ventana.title("Bitacora de trading " + fechaTitle)
-    ventana.iconbitmap("Recursos/img/icono.ico")
+    #ventana.iconbitmap("Recursos/img/icono.ico")
     ventana.geometry("1024x640")
     # ----------ventana------
     # ------Frames------
@@ -171,4 +171,4 @@ class Principal:
 
     def get_plantilla(self):
         plantilla = pt.Plantilla()
-        plantilla.ventanaEntrada(self.ventana)
+        plantilla.ventana_Nuevo(self.ventana)
