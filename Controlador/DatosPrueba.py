@@ -1,8 +1,8 @@
 
 class ConEntrada:
     def datosProvisionales(self):
-        lista = [["1", "2", "3", "4", "5", "6", "7", "8"],
-                 ["2", "2", "3", "4", "5", "6", "7", "8"],
-                 ["3", "2", "3", "4", "5", "6", "7", "8"]]
+        lista = [["1", "11/05/21", "00/00/0000", "compra", "50", "holaaa esto es una notaa", "link", "link"],
+                 ["2",  "11/05/21", "00/00/0000", "compra", "50", "holaaa esto es una notaa", "link", "link"],
+                 ["3",  "11/05/21", "00/00/0000", "compra", "50", "holaaa esto es una notaa", "link", "link"]]
 
         return lista

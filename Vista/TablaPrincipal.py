@@ -44,6 +44,22 @@ class Tabla:
         # ------contenido------
 
     def click(self, event):
-
+        lista = cd.ConEntrada.datosProvisionales(self)
         seleccion = p.Principal.tabla.item(p.Principal.tabla.selection())
         self.editar_operacion.ventana_Editar(seleccion["text"],p.Principal.ventana)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -4,6 +4,7 @@ from datetime import date
 from tkinter import ttk, messagebox
 from sys import version_info
 
+
 if version_info.major == 2:
     import Tkinter as tk
 elif version_info.major == 3:
@@ -13,8 +14,11 @@ from functools import partial
 
 import Vista.Calendario as cal
 import Modelo.Mod_operacion as Mop
+import Controlador.imagen_link_guardar as ctrl_img
 
 class Plantilla:
+
+    obj_img=ctrl_img.imagen_link()
 
     def ventana_Editar(self,id, ventana):
         #nueva operacion objeto
@@ -37,11 +41,14 @@ class Plantilla:
         obj_nuevo.set_fecha_ini(fecha_ini)
         obj_nuevo.set_fecha_fin(fecha_fin)
 
+
         # botones declaracion
         btn_fecha_inicio = Button(venEntrada)
         btn_fecha_fin = Button(venEntrada)
         btn_guardar_registro = Button(venEntrada)
         btn_cancelar=Button(venEntrada)
+        btn_img_entrada=Button(venEntrada)
+        btn_img_salida = Button(venEntrada)
         # ----------contenido
 
         lbl_fecha_inicio = Label(venEntrada, text="Fecha entada:")
@@ -78,14 +85,43 @@ class Plantilla:
         opciones = ["compra", "venta"]
         lista_desple['values'] = opciones
 
+        #imagen de entrada lbl
+        lbl_img_ent=Label(venEntrada,text="Imagen entrada")
+        lbl_img_ent.config(fon=("Helvética", 11))
+        lbl_img_ent.grid(row=3, column=0, pady=10, padx=10)
+
+        #imagen de direccion entrada lbl
+        lbl_img_dir_entrada=Label(venEntrada)
+        lbl_img_dir_entrada.config(fon=("Helvética", 11))
+        lbl_img_dir_entrada.grid(row=3, column=1, pady=10, padx=10)
+
+        #btn imagen de entrada
+        btn_img_entrada.config(fon=("Helvética", 11), text="Seleccionar",command=partial(self.obj_img.recuperar_img_entrada,obj_nuevo,lbl_img_dir_entrada,venEntrada))
+        btn_img_entrada.grid(row=3, column=2, pady=10, padx=10, columnspan=2)
+
+
+        # imagen de salida lbl
+        lbl_img_sal = Label(venEntrada, text="Imagen entrada")
+        lbl_img_sal.config(fon=("Helvética", 11))
+        lbl_img_sal.grid(row=4, column=0, pady=10, padx=10)
+
+        # imagen de direccion salida lbl
+        lbl_img_dir_salida = Label(venEntrada)
+        lbl_img_dir_salida.config(fon=("Helvética", 11))
+        lbl_img_dir_salida.grid(row=4, column=1, pady=10, padx=10)
+
+        # btn imagen de salida
+        btn_img_salida.config(fon=("Helvética", 11), text="Seleccionar",command=partial(self.obj_img.recuperar_img_salida,obj_nuevo,lbl_img_dir_salida,venEntrada))
+        btn_img_salida.grid(row=4, column=2, pady=10, padx=10, columnspan=2)
+
         # campo de texto LBL
         lbl_campo_texto = Label(venEntrada, text="Nota: ")
         lbl_campo_texto.config(fon=("Helvética", 11))
-        lbl_campo_texto.grid(row=3, column=0, pady=10, padx=10)
+        lbl_campo_texto.grid(row=5, column=0, pady=10, padx=10)
 
         # campo de texto
         campotexto = Text(venEntrada)
-        campotexto.grid(row=4, column=0, pady=10, padx=10, columnspan=2)
+        campotexto.grid(row=6, column=0, pady=10, padx=10, columnspan=2)
         campotexto.config(width=30, height=10)
 
         def guardar():
@@ -94,15 +130,17 @@ class Plantilla:
             self.registro_nuevo(obj_nuevo)
 
         btn_guardar_registro.config(fon=("Helvética", 11), text="guadar", command=guardar)
-        btn_guardar_registro.grid(row=5, column=1, pady=10, padx=10, columnspan=2)
+        btn_guardar_registro.grid(row=7, column=1, pady=10, padx=10, columnspan=2)
 
         def salir():
             valor = messagebox.askyesno("Salir", "¿deseas salir?")
             if valor:
                 venEntrada.destroy()
 
+
+
         btn_cancelar.config(fon=("Helvética", 11), text="Cancelar", command=salir)
-        btn_cancelar.grid(row=5, column=2, pady=10, padx=10, columnspan=2)
+        btn_cancelar.grid(row=7, column=2, pady=10, padx=10, columnspan=2)
 
     def registro_nuevo(self,nuevo_registro):
 
@@ -123,6 +161,8 @@ class Plantilla:
         fecha_ini = str(date.today())
         fecha_fin = "0000-00-00"
 
+
+
         # objeto de la clase
         obj_calendario = cal.Calendarios()
         # objeto de la clase
@@ -131,10 +171,14 @@ class Plantilla:
         obj_nuevo.set_fecha_ini(fecha_ini)
         obj_nuevo.set_fecha_fin(fecha_fin)
 
+        # asignamos una rutaa a ruta_img_salida
+        obj_nuevo.set_ruta_img_salida("/root")
+
         # botones declaracion
         btn_fecha_inicio = Button(venEntrada)
         btn_guardar_registro = Button(venEntrada)
         btn_cancelar=Button(venEntrada)
+        btn_img_entrada=Button(venEntrada)
         # ----------contenido
 
         lbl_fecha_inicio = Label(venEntrada, text="Fecha entada:")
@@ -150,18 +194,7 @@ class Plantilla:
         btn_fecha_inicio.config(fon=("Helvética", 11), text="Cambiar", command=partial(obj_calendario.plantilla_fec_ini,venEntrada,lbl_fecha_inicio_2,obj_nuevo))
         btn_fecha_inicio.grid(row=0, column=2, pady=10, padx=10)
 
-        # lbl_fecha_fin = Label(venEntrada, text="Fecha entada:")
-        # lbl_fecha_fin.config(fon=("Helvética", 11))
-        # lbl_fecha_fin.grid(row=1, column=0, pady=10, padx=10)
-        #
-        # lbl_fecha_fin_2 = Label(venEntrada, text=fecha_fin)
-        # lbl_fecha_fin_2.config(fon=("Helvética", 11))
-        # lbl_fecha_fin_2.grid(row=1, column=1, pady=10, padx=10)
-        # # boton
-        #
-        # btn_fecha_fin.config(fon=("Helvética", 11), text="Cambiar", command=partial(obj_calendario.plantilla_fec_fin,venEntrada,lbl_fecha_fin_2,obj_nuevo))
-        # btn_fecha_fin.grid(row=1, column=2, pady=10, padx=10)
-
+        #lista desplegable lbl
         lbl_desplegable = Label(venEntrada, text="Operacion: ")
         lbl_desplegable.config(fon=("Helvética", 11))
         lbl_desplegable.grid(row=2, column=0, pady=10, padx=10)
@@ -171,14 +204,29 @@ class Plantilla:
         opciones = ["compra", "venta"]
         lista_desple['values'] = opciones
 
+        # imagen de entrada lbl
+        lbl_img_ent = Label(venEntrada, text="Imagen entrada")
+        lbl_img_ent.config(fon=("Helvética", 11))
+        lbl_img_ent.grid(row=3, column=0, pady=10, padx=10)
+
+        # imagen de direccion entrada lbl
+        lbl_img_dir_entrada = Label(venEntrada)
+        lbl_img_dir_entrada.config(fon=("Helvética", 11))
+        lbl_img_dir_entrada.grid(row=3, column=1, pady=10, padx=10)
+
+        # btn imagen de salida
+        btn_img_entrada.config(fon=("Helvética", 11), text="Seleccionar",command=partial(self.obj_img.recuperar_img_entrada,obj_nuevo,lbl_img_dir_entrada,venEntrada))
+        btn_img_entrada.grid(row=3, column=2, pady=10, padx=10, columnspan=2)
+
+
         # campo de texto LBL
         lbl_campo_texto = Label(venEntrada, text="Nota: ")
         lbl_campo_texto.config(fon=("Helvética", 11))
-        lbl_campo_texto.grid(row=3, column=0, pady=10, padx=10)
+        lbl_campo_texto.grid(row=4, column=0, pady=10, padx=10)
 
         # campo de texto
         campotexto = Text(venEntrada)
-        campotexto.grid(row=3, column=1, pady=10, padx=10, columnspan=2)
+        campotexto.grid(row=4, column=1, pady=10, padx=10, columnspan=2)
         campotexto.config(width=30, height=10)
 
         def guardar():
@@ -192,7 +240,7 @@ class Plantilla:
                 venEntrada.destroy()
 
         btn_guardar_registro.config(fon=("Helvética", 11), text="guadar", command=guardar)
-        btn_guardar_registro.grid(row=5, column=1, pady=10, padx=10, columnspan=2)
+        btn_guardar_registro.grid(row=6, column=1, pady=10, padx=10, columnspan=2)
 
         def salir():
             valor = messagebox.askyesno("Salir", "¿deseas salir?")
@@ -200,8 +248,10 @@ class Plantilla:
                 venEntrada.destroy()
 
         btn_cancelar.config(fon=("Helvética", 11), text="Cancelar", command=salir)
-        btn_cancelar.grid(row=5, column=2, pady=10, padx=10, columnspan=2)
+        btn_cancelar.grid(row=6, column=2, pady=10, padx=10, columnspan=2)
 
     def registro_editar(self, nuevo_registro):
 
         print(nuevo_registro.__str__())
+
+
