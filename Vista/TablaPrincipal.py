@@ -3,11 +3,13 @@ from tkinter import *
 import Vista.Principal as p
 import Controlador.DatosPrueba as cd
 import Vista.Plantilla as pl
+import Controlador.Registros as ConReg
 
 
 class Tabla:
 
     editar_operacion=pl.Plantilla()
+    obj_registros_con= ConReg.ControlRegistros()
 
     def TablaPrincipal(self):
 
@@ -16,7 +18,7 @@ class Tabla:
         tabla = p.Principal.tabla
 
         tabla.pack()
-        lista = cd.ConEntrada.datosProvisionales(self)
+        lista = cd.ConEntrada.datos_tabla(self)
         # -------variables------
         # ------contenido------
 
@@ -44,9 +46,11 @@ class Tabla:
         # ------contenido------
 
     def click(self, event):
-        lista = cd.ConEntrada.datosProvisionales(self)
-        seleccion = p.Principal.tabla.item(p.Principal.tabla.selection())
-        self.editar_operacion.ventana_Editar(seleccion["text"],p.Principal.ventana)
+        #lista = cd.ConEntrada.datos_tabla(self)
+        tabla=p.Principal.tabla
+        seleccion = tabla.item(tabla.selection())
+        item=self.obj_registros_con.editar_registro_obtener(seleccion["text"])
+        self.editar_operacion.ventana_Editar(item,p.Principal.ventana,tabla)
 
 
 

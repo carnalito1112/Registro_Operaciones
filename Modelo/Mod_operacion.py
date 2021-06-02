@@ -6,6 +6,7 @@ class Operacion :
     nota = ""
     ruta_img_entrada=""
     ruta_img_salida=""
+    gan_perd =0
     # def __init__(self, fecha_ini, fecha_fin, operacion, nota):
     #     self.fecha_ini = fecha_ini
     #     self.fecha_fin= fecha_fin
@@ -14,7 +15,7 @@ class Operacion :
 
 
     def __str__(self):
-        return "{},{},{},{},{},{}".format(self.fecha_ini,self.fecha_fin,self.operacion, self.nota,self.ruta_img_salida,self.ruta_img_entrada)
+        return "{},{},{},{},{},{},{}".format(self.fecha_ini,self.fecha_fin,self.gan_perd,self.operacion, self.nota,self.ruta_img_salida,self.ruta_img_entrada)
 
     def set_fecha_ini(self,fecha_ini):
         self.fecha_ini=fecha_ini
@@ -51,6 +52,13 @@ class Operacion :
 
     def get_ruta_img_salida(self):
         return self.ruta_img_salida
+
+    def set_gan_perd (self,gan_perd):
+        self.gan_perd=gan_perd
+
+    def get_gan_perd(self):
+        return self.gan_perd
+
 
 #p= Operacion("21/05/2001","22/05/2021","venta","holaaa como estas culitoo")
 

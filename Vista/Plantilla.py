@@ -5,6 +5,7 @@ from tkinter import ttk, messagebox
 from sys import version_info
 
 
+
 if version_info.major == 2:
     import Tkinter as tk
 elif version_info.major == 3:
@@ -15,31 +16,39 @@ from functools import partial
 import Vista.Calendario as cal
 import Modelo.Mod_operacion as Mop
 import Controlador.imagen_link_guardar as ctrl_img
+import Controlador.Registros as reg
+import Controlador.DatosPrueba as datos_prue
 
 class Plantilla:
 
     obj_img=ctrl_img.imagen_link()
+    obj_registro=reg.ControlRegistros()
+    obj_datos=datos_prue.ConEntrada()
 
-    def ventana_Editar(self,id, ventana):
+    def ventana_Editar(self,item, ventana,tabla):
         #nueva operacion objeto
         obj_nuevo=Mop.Operacion()
         print(id)
+
 
         ##ventana
         venEntrada = Toplevel(ventana)
         # venEntrada.geometry("800x500")
 
         # declaracion de variables
-        fecha_ini = str(date.today())
-        fecha_fin = str(date.today())
+
 
         # objeto de la clase
         obj_calendario = cal.Calendarios()
         # objeto de la clase
 
         #asignamos a objeto registro fechas
-        obj_nuevo.set_fecha_ini(fecha_ini)
-        obj_nuevo.set_fecha_fin(fecha_fin)
+        obj_nuevo.set_fecha_ini(item[0][1])
+        obj_nuevo.set_fecha_fin(item[0][2])
+
+        #asignamos al objeto la imagen de entrada
+        obj_nuevo.set_ruta_img_entrada(item[0][6])
+        obj_nuevo.set_ruta_img_salida(item[0][7])
 
 
         # botones declaracion
@@ -55,7 +64,7 @@ class Plantilla:
         lbl_fecha_inicio.config(fon=("Helvética", 11))
         lbl_fecha_inicio.grid(row=0, column=0, pady=10, padx=10)
 
-        lbl_fecha_inicio_2 = Label(venEntrada, text=fecha_ini)
+        lbl_fecha_inicio_2 = Label(venEntrada, text=item[0][1])
         lbl_fecha_inicio_2.config(fon=("Helvética", 11))
         lbl_fecha_inicio_2.grid(row=0, column=1, pady=10, padx=10)
 
@@ -68,7 +77,7 @@ class Plantilla:
         lbl_fecha_fin.config(fon=("Helvética", 11))
         lbl_fecha_fin.grid(row=1, column=0, pady=10, padx=10)
 
-        lbl_fecha_fin_2 = Label(venEntrada, text=fecha_fin)
+        lbl_fecha_fin_2 = Label(venEntrada, text=item[0][2])
         lbl_fecha_fin_2.config(fon=("Helvética", 11))
         lbl_fecha_fin_2.grid(row=1, column=1, pady=10, padx=10)
         # boton
@@ -82,8 +91,15 @@ class Plantilla:
 
         lista_desple = ttk.Combobox(venEntrada, width=17)
         lista_desple.grid(row=2, column=1, pady=10, padx=10)
-        opciones = ["compra", "venta"]
-        lista_desple['values'] = opciones
+        if item[0][3]=="compra":
+            opciones = ["compra", "venta"]
+            lista_desple['values'] = opciones
+            lista_desple.current(0)
+
+        if item[0][3]=="venta":
+            opciones = ["venta", "compra"]
+            lista_desple['values'] = opciones
+            lista_desple.current(0)
 
         #imagen de entrada lbl
         lbl_img_ent=Label(venEntrada,text="Imagen entrada")
@@ -91,7 +107,7 @@ class Plantilla:
         lbl_img_ent.grid(row=3, column=0, pady=10, padx=10)
 
         #imagen de direccion entrada lbl
-        lbl_img_dir_entrada=Label(venEntrada)
+        lbl_img_dir_entrada=Label(venEntrada,text=item[0][6])
         lbl_img_dir_entrada.config(fon=("Helvética", 11))
         lbl_img_dir_entrada.grid(row=3, column=1, pady=10, padx=10)
 
@@ -106,7 +122,7 @@ class Plantilla:
         lbl_img_sal.grid(row=4, column=0, pady=10, padx=10)
 
         # imagen de direccion salida lbl
-        lbl_img_dir_salida = Label(venEntrada)
+        lbl_img_dir_salida = Label(venEntrada,text=item[0][7])
         lbl_img_dir_salida.config(fon=("Helvética", 11))
         lbl_img_dir_salida.grid(row=4, column=1, pady=10, padx=10)
 
@@ -121,13 +137,30 @@ class Plantilla:
 
         # campo de texto
         campotexto = Text(venEntrada)
+        campotexto.insert(1.0,item[0][5])
         campotexto.grid(row=6, column=0, pady=10, padx=10, columnspan=2)
         campotexto.config(width=30, height=10)
 
         def guardar():
-            obj_nuevo.set_operacion(lista_desple.get())
-            obj_nuevo.set_nota(campotexto.get("1.0","end"))
-            self.registro_nuevo(obj_nuevo)
+            valor = messagebox.askyesno("Guardar", "¿deseas guardarlo?")
+            if valor:
+                obj_nuevo.set_operacion(lista_desple.get())
+                obj_nuevo.set_nota(campotexto.get("1.0", "end"))
+
+                for row in tabla.get_children():
+                    tabla.delete(row)
+                    # items.append(l[0])
+                print(item[0][0])
+                self.obj_registro.editar_registro(obj_nuevo,item[0][0])
+
+                lista = self.obj_datos.datos_tabla()
+                for l in lista:
+                    tabla.insert(parent="", index="end", text=l[0], values=(l[1], l[2], l[3], l[4], l[5], l[6], l[7]))
+                venEntrada.destroy()
+            else:
+                venEntrada.destroy()
+
+
 
         btn_guardar_registro.config(fon=("Helvética", 11), text="guadar", command=guardar)
         btn_guardar_registro.grid(row=7, column=1, pady=10, padx=10, columnspan=2)
@@ -142,13 +175,10 @@ class Plantilla:
         btn_cancelar.config(fon=("Helvética", 11), text="Cancelar", command=salir)
         btn_cancelar.grid(row=7, column=2, pady=10, padx=10, columnspan=2)
 
-    def registro_nuevo(self,nuevo_registro):
-
-        print(nuevo_registro.__str__())
 
 
 
-    def ventana_Nuevo(self, ventana):
+    def ventana_Nuevo(self, ventana, tabla):
         #nueva operacion objeto
         obj_nuevo=Mop.Operacion()
 
@@ -203,6 +233,7 @@ class Plantilla:
         lista_desple.grid(row=2, column=1, pady=10, padx=10)
         opciones = ["compra", "venta"]
         lista_desple['values'] = opciones
+        lista_desple.current(1)
 
         # imagen de entrada lbl
         lbl_img_ent = Label(venEntrada, text="Imagen entrada")
@@ -234,7 +265,16 @@ class Plantilla:
             if valor:
                 obj_nuevo.set_operacion(lista_desple.get())
                 obj_nuevo.set_nota(campotexto.get("1.0","end"))
-                self.registro_nuevo(obj_nuevo)
+
+                for row in tabla.get_children():
+                    tabla.delete(row)
+                    #items.append(l[0])
+
+                self.obj_registro.nuevo_registro(obj_nuevo)
+
+                lista= self.obj_datos.datos_tabla()
+                for l in lista:
+                    tabla.insert(parent="", index="end", text=l[0], values=(l[1], l[2], l[3], l[4], l[5], l[6], l[7]))
                 venEntrada.destroy()
             else:
                 venEntrada.destroy()
@@ -250,8 +290,5 @@ class Plantilla:
         btn_cancelar.config(fon=("Helvética", 11), text="Cancelar", command=salir)
         btn_cancelar.grid(row=6, column=2, pady=10, padx=10, columnspan=2)
 
-    def registro_editar(self, nuevo_registro):
-
-        print(nuevo_registro.__str__())
 
 
