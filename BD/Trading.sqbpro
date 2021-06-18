@@ -1,7 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/PC-Trading/Documents/GitHub/Registro_Operaciones/BD/Trading.db" readonly="0" foreign_keys="" case_sensitive_like="" temp_store="" wal_autocheckpoint="" synchronous=""/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2617"/><column_width id="4" width="0"/></tab_structure><tab_browse><current_table name="0,0:"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 2">SELECT op_id_operacion,op_fecha_entrada,op_fecha_salida,op_operacion,op_gan_per,op_nota,op_ruta_imagen_ent,op_ruta_imagen_sal 
-FROM tb_operaciones ORDER BY op_id_operacion DESC ;
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/PC-Trading/Documents/GitHub/Registro_Operaciones/BD/Trading.db" readonly="0" foreign_keys="" case_sensitive_like="" temp_store="" wal_autocheckpoint="" synchronous=""/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2617"/><column_width id="4" width="0"/></tab_structure><tab_browse><current_table name="0,0:"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1">
+SELECT us_money FROM tb_usuario where us_id = 1
+
+UPDATE tb_usuario SET us_money = 50000 WHERE us_id= 1
+
+SELECT * FROM tb_operaciones where us_id = 1
+
+DELETE FROM tb_operaciones 
+
+UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME=tb_operaciones;
+
+UPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'tb_operaciones';
 
 
-SELECT op_id_operacion,op_fecha_entrada,op_fecha_salida,op_operacion,op_gan_per,op_nota,op_ruta_imagen_ent,op_ruta_imagen_sal FROM tb_operaciones WHERE op_id_operacion=18;
 
-UPDATE tb_operaciones SET op_fecha_entrada=&quot;01/06/2021&quot;, op_fecha_salida=&quot;03/06/2021&quot;,op_operacion=&quot;compra&quot;,op_gan_per=0,op_ruta_imagen_ent=&quot;/ruta entrada&quot;,op_fecha_salida=&quot;/root&quot; WHERE op_id_operacion=18</sql><current_tab id="0"/></tab_sql></sqlb_project>
+</sql><current_tab id="0"/></tab_sql></sqlb_project>

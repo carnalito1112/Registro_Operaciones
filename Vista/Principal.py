@@ -1,6 +1,7 @@
 from datetime import date
 from tkinter import *
 from tkinter import messagebox, ttk
+
 from sys import version_info
 
 if version_info.major == 2:
@@ -13,6 +14,8 @@ from functools import partial
 import Vista.Calendario as c
 import Vista.TablaPrincipal as tp
 import Vista.Plantilla as pt
+import Vista.Saldo as saldo
+import Controlador.Registros as control_registros
 
 
 class Principal:
@@ -42,10 +45,6 @@ class Principal:
     ##Tabla----
 
 
-    #---------variables de a clase Entrada - las declaramos aqui pq la utilizaremos para nueva entrada y editar
-
-
-    #---------variables de la clase entrada
 
 
     #-----variables locales de la clase principal
@@ -53,6 +52,8 @@ class Principal:
     fechaFin = str(date.today())
     btnFechaIni = Button(frameSuperior, text="Cambiar")
     btnFechaFin = Button(frameSuperior, text="Cambiar")
+    lblTotal = Label(frameSuperior )
+    lblGanPer = Label(frameSuperior)
 
     ##------------variables-----------
 
@@ -61,6 +62,8 @@ class Principal:
         ##-------objetos-----
         obj_calendario = c.Calendarios()
         tabla = tp.Tabla()
+        obj_sal=saldo.Saldo()
+        obj_reg = control_registros.ControlRegistros()
 
 
         ##-------objetos-----
@@ -71,7 +74,7 @@ class Principal:
         # -------------filemenu------
         filemenu = Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Opciones", menu=filemenu)
-        filemenu.add_command(label="Saldo")
+        filemenu.add_command(label="Saldo",command=partial(obj_sal.saldo,self.ventana, self.tabla,self.lblTotal,self.lblGanPer))
         filemenu.add_command(label="Contacto")
         filemenu.add_command(label="Salir", command=self.salir)
 
@@ -88,9 +91,9 @@ class Principal:
         lblTotalLetra.config(fon=("Helvética", 11))
         lblTotalLetra.place(x=240, y=15)
         # label total numero lo obtenemos de sumar las ganancias o perdidas de un usuario
-        lblTotal = Label(self.frameSuperior, text="25,550")
-        lblTotal.config(fon=("Helvética", 11))
-        lblTotal.place(x=300, y=15)
+
+        self.lblTotal.config(fon=("Helvética", 11),text=obj_reg.consultar_saldo())
+        self.lblTotal.place(x=300, y=15)
 
         # label Ganancia/perdida
         lblGanPerLetra = Label(self.frameSuperior, text="Ganancia/Perdida:")
@@ -98,9 +101,9 @@ class Principal:
         lblGanPerLetra.place(x=420, y=15)
 
         # label Ganancia/perdida la obtenemos de la siguiene manera saldo original - saldo total hasta hoy
-        lblGanPer = Label(self.frameSuperior, text="550")
-        lblGanPer.config(fon=("Helvética", 11))
-        lblGanPer.place(x=550, y=15)
+
+        self.lblGanPer.config(fon=("Helvética", 11), text=obj_reg.consultar_ganacia_perdida())
+        self.lblGanPer.place(x=550, y=15)
 
         # label Ganancia/perdida dia anterior en letra
         lblGanPerDiaLetra = Label(self.frameSuperior, text="Ganancia/Perdida dia anterior:")
@@ -167,6 +170,7 @@ class Principal:
         valor = messagebox.askyesno("Salir", "¿deseas salir del programa?")
         if valor:
             self.ventana.quit()
+
 
 
     def get_plantilla(self):

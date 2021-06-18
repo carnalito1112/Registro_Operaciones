@@ -1,4 +1,4 @@
-import tkinter
+
 from tkinter import *
 from datetime import date
 from tkinter import ttk, messagebox
@@ -15,20 +15,20 @@ from functools import partial
 
 import Vista.Calendario as cal
 import Modelo.Mod_operacion as Mop
-import Controlador.imagen_link_guardar as ctrl_img
+import Controlador.imagen as ctrl_img
 import Controlador.Registros as reg
 import Controlador.DatosPrueba as datos_prue
 
 class Plantilla:
 
-    obj_img=ctrl_img.imagen_link()
+    obj_img=ctrl_img.imagen()
     obj_registro=reg.ControlRegistros()
     obj_datos=datos_prue.ConEntrada()
 
     def ventana_Editar(self,item, ventana,tabla):
         #nueva operacion objeto
         obj_nuevo=Mop.Operacion()
-        print(id)
+        print(item)
 
 
         ##ventana
@@ -101,44 +101,65 @@ class Plantilla:
             lista_desple['values'] = opciones
             lista_desple.current(0)
 
+        #lbl de ganancia o perdida
+        lbl_gan_per = Label(venEntrada, text="Ganancia o perdida")
+        lbl_gan_per.config(fon=("Helvética", 11))
+        lbl_gan_per.grid(row=3, column=0, pady=10, padx=10)
+
+        txt_gan_per=Entry(venEntrada)
+        txt_gan_per.insert(tk.END,item[0][4])
+        txt_gan_per.config(fon=("Helvética", 11))
+        txt_gan_per.grid(row=3, column=1, pady=10, padx=10)
+
+
         #imagen de entrada lbl
         lbl_img_ent=Label(venEntrada,text="Imagen entrada")
         lbl_img_ent.config(fon=("Helvética", 11))
-        lbl_img_ent.grid(row=3, column=0, pady=10, padx=10)
+        lbl_img_ent.grid(row=4, column=0, pady=10, padx=10)
 
         #imagen de direccion entrada lbl
         lbl_img_dir_entrada=Label(venEntrada,text=item[0][6])
         lbl_img_dir_entrada.config(fon=("Helvética", 11))
-        lbl_img_dir_entrada.grid(row=3, column=1, pady=10, padx=10)
+        lbl_img_dir_entrada.grid(row=4, column=1, pady=10, padx=10)
 
         #btn imagen de entrada
         btn_img_entrada.config(fon=("Helvética", 11), text="Seleccionar",command=partial(self.obj_img.recuperar_img_entrada,obj_nuevo,lbl_img_dir_entrada,venEntrada))
-        btn_img_entrada.grid(row=3, column=2, pady=10, padx=10, columnspan=2)
+        btn_img_entrada.grid(row=4, column=2, pady=10, padx=10)
 
+        #btn abrir imagen de entrada
+        btn_abrir_img_ent=Button(venEntrada)
+        btn_abrir_img_ent.config(fon=("Helvética", 11), text="Abrir",command=partial(self.obj_img.abrir_imagen_ent,item[0][6]))
+        btn_abrir_img_ent.grid(row=4, column=3, pady=10, padx=10)
 
         # imagen de salida lbl
         lbl_img_sal = Label(venEntrada, text="Imagen entrada")
         lbl_img_sal.config(fon=("Helvética", 11))
-        lbl_img_sal.grid(row=4, column=0, pady=10, padx=10)
+        lbl_img_sal.grid(row=5, column=0, pady=10, padx=10)
 
         # imagen de direccion salida lbl
         lbl_img_dir_salida = Label(venEntrada,text=item[0][7])
         lbl_img_dir_salida.config(fon=("Helvética", 11))
-        lbl_img_dir_salida.grid(row=4, column=1, pady=10, padx=10)
+        lbl_img_dir_salida.grid(row=5, column=1, pady=10, padx=10)
 
         # btn imagen de salida
         btn_img_salida.config(fon=("Helvética", 11), text="Seleccionar",command=partial(self.obj_img.recuperar_img_salida,obj_nuevo,lbl_img_dir_salida,venEntrada))
-        btn_img_salida.grid(row=4, column=2, pady=10, padx=10, columnspan=2)
+        btn_img_salida.grid(row=5, column=2, pady=10, padx=10)
+
+        # btn abrir imagen de salida
+        btn_abrir_img_sal = Button(venEntrada)
+        btn_abrir_img_sal.config(fon=("Helvética", 11), text="Abrir",command=partial(self.obj_img.abrir_imagen_sal, obj_nuevo))
+        btn_abrir_img_sal.grid(row=5, column=3, pady=10, padx=10)
+        btn_abrir_img_sal.grid(row=5, column=3, pady=10, padx=10)
 
         # campo de texto LBL
         lbl_campo_texto = Label(venEntrada, text="Nota: ")
         lbl_campo_texto.config(fon=("Helvética", 11))
-        lbl_campo_texto.grid(row=5, column=0, pady=10, padx=10)
+        lbl_campo_texto.grid(row=6, column=0, pady=10, padx=10)
 
         # campo de texto
         campotexto = Text(venEntrada)
         campotexto.insert(1.0,item[0][5])
-        campotexto.grid(row=6, column=0, pady=10, padx=10, columnspan=2)
+        campotexto.grid(row=7, column=0, pady=10, padx=10, columnspan=2)
         campotexto.config(width=30, height=10)
 
         def guardar():
@@ -146,13 +167,22 @@ class Plantilla:
             if valor:
                 obj_nuevo.set_operacion(lista_desple.get())
                 obj_nuevo.set_nota(campotexto.get("1.0", "end"))
+                gan_per=txt_gan_per.get()
+                try:
+                    float(gan_per)
+                    obj_nuevo.set_gan_perd(gan_per)
+                except:
+                    messagebox.showerror(title="Error en ganacia, perdida", message="El campo ganancia o perdida solo debe contener numeros")
+                    venEntrada.destroy()
 
+                #borramos la tabla
                 for row in tabla.get_children():
                     tabla.delete(row)
                     # items.append(l[0])
                 print(item[0][0])
                 self.obj_registro.editar_registro(obj_nuevo,item[0][0])
 
+                #reinsertamos datos en la tabla
                 lista = self.obj_datos.datos_tabla()
                 for l in lista:
                     tabla.insert(parent="", index="end", text=l[0], values=(l[1], l[2], l[3], l[4], l[5], l[6], l[7]))
@@ -163,17 +193,20 @@ class Plantilla:
 
 
         btn_guardar_registro.config(fon=("Helvética", 11), text="guadar", command=guardar)
-        btn_guardar_registro.grid(row=7, column=1, pady=10, padx=10, columnspan=2)
+        btn_guardar_registro.grid(row=8, column=1, pady=10, padx=10, columnspan=2)
 
         def salir():
             valor = messagebox.askyesno("Salir", "¿deseas salir?")
             if valor:
                 venEntrada.destroy()
+            else:
+                venEntrada.wm_attributes("-topmost", True)
+
 
 
 
         btn_cancelar.config(fon=("Helvética", 11), text="Cancelar", command=salir)
-        btn_cancelar.grid(row=7, column=2, pady=10, padx=10, columnspan=2)
+        btn_cancelar.grid(row=8, column=2, pady=10, padx=10, columnspan=2)
 
 
 
@@ -235,6 +268,7 @@ class Plantilla:
         lista_desple['values'] = opciones
         lista_desple.current(1)
 
+
         # imagen de entrada lbl
         lbl_img_ent = Label(venEntrada, text="Imagen entrada")
         lbl_img_ent.config(fon=("Helvética", 11))
@@ -285,7 +319,9 @@ class Plantilla:
         def salir():
             valor = messagebox.askyesno("Salir", "¿deseas salir?")
             if valor:
-                venEntrada.destroy()
+                venEntrada.quit()
+            else:
+                venEntrada.wm_attributes("-topmost", True)
 
         btn_cancelar.config(fon=("Helvética", 11), text="Cancelar", command=salir)
         btn_cancelar.grid(row=6, column=2, pady=10, padx=10, columnspan=2)

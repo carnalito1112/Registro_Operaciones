@@ -20,7 +20,8 @@ print(rows)
 
 #"""ABRIR UNA IMAGEN A COLOR Y A GRISES"""
 def abrir_imagen():
-    i= Image.open(r"C:\Users\PC-Trading\Pictures\cyberpunk-2077.jpg","r")
+    im="C:/Users/PC-Trading/Pictures/cyberpunk-2077.jpg"
+    i= Image.open(im,"r")
     i.show()
 
 abrir_imagen()
