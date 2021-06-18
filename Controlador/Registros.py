@@ -49,14 +49,26 @@ class ControlRegistros:
         #"""UPDATE tb_operaciones SET op_fecha_entrada = ?, op_fecha_salida = ?, op_operacion = ?, op_gan_per = 0, op_ruta_imagen_ent = ?, op_fecha_salida = ? WHERE op_id_operacion = ?"""
 
 
+    def consultar_ganacia_perdida(self):
+        conexion = self.obj_conexion.conexion()
+        cursor = conexion.cursor()
+        cursor.execute("SELECT sum(op_gan_per) FROM tb_operaciones")
+        gan_per = cursor.fetchall()
+        conexion.commit()
+        conexion.close()
+
+        return gan_per
+
     def consultar_saldo(self):
         conexion = self.obj_conexion.conexion()
         cursor = conexion.cursor()
         cursor.execute("SELECT us_money FROM tb_usuario where us_id = 1")
         saldo= cursor.fetchall()
+        gan_per=self.consultar_ganacia_perdida()
         conexion.commit()
         conexion.close()
-        return saldo
+        return saldo[0][0]+gan_per[0][0]
+
 
 
     def actualizar_saldo(self, ventana,saldo,lista_desple,tabla):
@@ -83,12 +95,3 @@ class ControlRegistros:
             ventana.destroy()
 
 
-    def consultar_ganacia_perdida(self):
-        conexion = self.obj_conexion.conexion()
-        cursor = conexion.cursor()
-        cursor.execute("SELECT sum(op_gan_per) FROM tb_operaciones")
-        gan_per = cursor.fetchall()
-        conexion.commit()
-        conexion.close()
-
-        return gan_per

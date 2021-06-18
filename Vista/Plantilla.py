@@ -17,7 +17,7 @@ import Vista.Calendario as cal
 import Modelo.Mod_operacion as Mop
 import Controlador.imagen as ctrl_img
 import Controlador.Registros as reg
-import Controlador.DatosPrueba as datos_prue
+import Controlador.Datos_consulta as datos_prue
 
 class Plantilla:
 
@@ -25,7 +25,7 @@ class Plantilla:
     obj_registro=reg.ControlRegistros()
     obj_datos=datos_prue.ConEntrada()
 
-    def ventana_Editar(self,item, ventana,tabla):
+    def ventana_Editar(self,item, ventana,tabla,lbl_total):
         #nueva operacion objeto
         obj_nuevo=Mop.Operacion()
         print(item)
@@ -167,6 +167,7 @@ class Plantilla:
             if valor:
                 obj_nuevo.set_operacion(lista_desple.get())
                 obj_nuevo.set_nota(campotexto.get("1.0", "end"))
+
                 gan_per=txt_gan_per.get()
                 try:
                     float(gan_per)
@@ -186,6 +187,8 @@ class Plantilla:
                 lista = self.obj_datos.datos_tabla()
                 for l in lista:
                     tabla.insert(parent="", index="end", text=l[0], values=(l[1], l[2], l[3], l[4], l[5], l[6], l[7]))
+
+                lbl_total.config(text=self.obj_registro.consultar_saldo())
                 venEntrada.destroy()
             else:
                 venEntrada.destroy()

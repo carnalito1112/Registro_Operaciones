@@ -1,7 +1,7 @@
 from tkinter import *
 
 import Vista.Principal as p
-import Controlador.DatosPrueba as cd
+import Controlador.Datos_consulta as cd
 import Vista.Plantilla as pl
 import Controlador.Registros as ConReg
 
@@ -10,6 +10,7 @@ class Tabla:
 
     editar_operacion=pl.Plantilla()
     obj_registros_con= ConReg.ControlRegistros()
+
 
     def TablaPrincipal(self):
 
@@ -48,9 +49,11 @@ class Tabla:
     def click(self, event):
         #lista = cd.ConEntrada.datos_tabla(self)
         tabla=p.Principal.tabla
+        lbl_total=p.Principal.lblTotal
         seleccion = tabla.item(tabla.selection())
         item=self.obj_registros_con.editar_registro_obtener(seleccion["text"])
-        self.editar_operacion.ventana_Editar(item,p.Principal.ventana,tabla)
+        self.editar_operacion.ventana_Editar(item,p.Principal.ventana,tabla,lbl_total)
+
 
 
 

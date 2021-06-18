@@ -16,6 +16,7 @@ import Vista.TablaPrincipal as tp
 import Vista.Plantilla as pt
 import Vista.Saldo as saldo
 import Controlador.Registros as control_registros
+import Controlador.Datos_consulta as datos_tabla_fecha
 
 
 class Principal:
@@ -57,13 +58,19 @@ class Principal:
 
     ##------------variables-----------
 
-    ###Contructor
+    #objetos globales
+
+    obj_datos_fecha = datos_tabla_fecha.ConEntrada()
+
+    # objetos globales
+
     def principalVen(self):
         ##-------objetos-----
         obj_calendario = c.Calendarios()
         tabla = tp.Tabla()
         obj_sal=saldo.Saldo()
         obj_reg = control_registros.ControlRegistros()
+
 
 
         ##-------objetos-----
@@ -105,15 +112,15 @@ class Principal:
         self.lblGanPer.config(fon=("Helvética", 11), text=obj_reg.consultar_ganacia_perdida())
         self.lblGanPer.place(x=550, y=15)
 
-        # label Ganancia/perdida dia anterior en letra
-        lblGanPerDiaLetra = Label(self.frameSuperior, text="Ganancia/Perdida dia anterior:")
-        lblGanPerDiaLetra.config(fon=("Helvética", 11))
-        lblGanPerDiaLetra.place(x=635, y=15)
-
-        # Label ganancia/perdida de dia anterior
-        lblGanPerDia = Label(self.frameSuperior, text="200")
-        lblGanPerDia.config(fon=("Helvética", 11))
-        lblGanPerDia.place(x=840, y=15)
+        # # label Ganancia/perdida dia anterior en letra
+        # lblGanPerDiaLetra = Label(self.frameSuperior, text="Ganancia/Perdida dia anterior:")
+        # lblGanPerDiaLetra.config(fon=("Helvética", 11))
+        # lblGanPerDiaLetra.place(x=635, y=15)
+        #
+        # # Label ganancia/perdida de dia anterior
+        # lblGanPerDia = Label(self.frameSuperior, text="200")
+        # lblGanPerDia.config(fon=("Helvética", 11))
+        # lblGanPerDia.place(x=840, y=15)
 
         # boton nueva operacion
         btnNuevOperacion = Button(self.frameSuperior, text="Nueva Operacion", command=self.get_plantilla)
@@ -122,38 +129,45 @@ class Principal:
         # boton nueva operacion
         lblResultados = Label(self.frameSuperior, text="Resultados de la tabla")
         lblResultados.config(fon=("Helvética", 11))
-        lblResultados.place(x=220, y=70)
+        lblResultados.place(x=180, y=70)
 
         # label fecha inicio
 
         lblFechaIni = Label(self.frameSuperior, text="Fecha inicio:")
         lblFechaIni.config(fon=("Helvética", 11))
-        lblFechaIni.place(x=420, y=70)
+        lblFechaIni.place(x=350, y=70)
 
         # label fecha inicio 2
         #se envia a calendario
         lblFecha_ini_2 = Label(self.frameSuperior, text=self.fechaIni)
         lblFecha_ini_2.config(fon=("Helvética", 11))
-        lblFecha_ini_2.place(x=510, y=70)
+        lblFecha_ini_2.place(x=445, y=70)
         # boton fecha de inicio
 
         self.btnFechaIni.config(fon=("Helvética", 11), command=partial(obj_calendario.plantilla_fec,self.ventana,lblFecha_ini_2))
-        self.btnFechaIni.place(x=610, y=60)
+        self.btnFechaIni.place(x=540, y=60)
 
         # lacel fecha final
         lblFecha_fin = Label(self.frameSuperior, text="final:")
         lblFecha_fin.config(fon=("Helvética", 11))
-        lblFecha_fin.place(x=700, y=70)
+        lblFecha_fin.place(x=650, y=70)
 
         #se envia a calendario
         lblFecha_fin_2 = Label(self.frameSuperior, text=self.fechaFin)
         lblFecha_fin_2.config(fon=("Helvética", 11))
-        lblFecha_fin_2.place(x=750, y=70)
+        lblFecha_fin_2.place(x=690, y=70)
 
         # boton fecha de final
 
         self.btnFechaFin.config(fon=("Helvética", 11), command=partial(obj_calendario.plantilla_fec,self.ventana,lblFecha_fin_2))
-        self.btnFechaFin.place(x=850, y=60)
+        self.btnFechaFin.place(x=790, y=60)
+
+        #boton  consultar
+
+        btnConsultar_tabla=Button(self.frameSuperior, text="Consultar")
+        btnConsultar_tabla.place(x=915, y=60)
+        btnConsultar_tabla.config(fon=("Helvética", 11), command=partial( self.Consultar_tabla_fecha,lblFecha_ini_2,lblFecha_fin_2, self.tabla))
+
 
         # ----------------Contenido superior------------
 
@@ -176,3 +190,14 @@ class Principal:
     def get_plantilla(self):
         plantilla = pt.Plantilla()
         plantilla.ventana_Nuevo(self.ventana, self.tabla)
+
+    def Consultar_tabla_fecha(self,Fecha_ini,Fecha_fin,tabla):
+
+
+        lista_fecha= self.obj_datos_fecha.datos_tabla_fechas(Fecha_ini,Fecha_fin)
+        for row in tabla.get_children():
+            tabla.delete(row)
+
+        for l in lista_fecha:
+            tabla.insert(parent="", index="end", text=l[0], values=(l[1], l[2], l[3], l[4], l[5], l[6], l[7]))
+        print(lista_fecha)
