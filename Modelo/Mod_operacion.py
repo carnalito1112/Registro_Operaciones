@@ -60,6 +60,6 @@ class Operacion :
         return self.gan_perd
 
 
-#p= Operacion("21/05/2001","22/05/2021","venta","holaaa como estas culitoo")
+#p= Operacion("21/05/2001","22/05/2021","venta","h olaa")
 
 #print(p.__str__())
